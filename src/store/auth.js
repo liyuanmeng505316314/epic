@@ -1,44 +1,51 @@
-import { observable,action} from 'mobx'
-
+import { message } from 'antd';
+import { observable,action,makeObservable} from 'mobx'
+import {Auth} from '../model'
 class AuthStore{
-    @observable isLogin = false; // 约等于const isLogin=observable(false)
-    @observable isLoading =false;
-    @observable values={
-        username:'a',
-        password:'a',
+    constructor(){
+        makeObservable(this)
     };
-  @action setIsLogin(isLogin){
-      this.isLogin=isLogin;
-  };
+    @observable values={
+        username:'',
+        password:'',
+    };
   @action setUsername(username){
-      this.value.username=username;
+      this.values.username=username;
   };
   @action setPassword(password){
-      this.value.password=password;
+      this.values.password=password;
   };
-  @ action login(){
-      console.log('登录中......')
-      this.isLoading=true;
-      setTimeout(()=>{
-          console.log('登录成功')
-          this.isLoading=false;
-          this.isLogin=true;
-      },1000)
+  @action login(){
+    return new Promise((resolve,reject)=>{
+      Auth.login(this.values.username,this.values.password)
+       .then(user=>{
+            console.log('Success')       
+            resolve(user)})
+        .catch(err=>{
+            message.error('Fail');
+            reject(err)});
+        })
   };
+
   @action register(){
-    console.log('注册中......')
     this.isLoading=true;
-    setTimeout(()=>{
-        console.log('注册成功')
-        this.isLoading=false;
-        this.isLogin=true;
-    },1000)
+    return new Promise((resolve,reject)=>{
+        Auth.register(this.values.username,this.values.password)
+        .then((user)=>{
+            console.log('Success');
+            resolve(user);
+            })
+        .catch((err)=>{
+            message.error('Fail');
+            reject(err);
+            })
+        })
   };
   @action logout(){
-      console.log('注销');
+      Auth.logout();
   }
 }
-export default AuthStore;
+export {AuthStore};
 
 
 

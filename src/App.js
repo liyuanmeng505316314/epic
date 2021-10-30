@@ -3,6 +3,7 @@ import React ,{Suspense,lazy}from 'react';
 import Header from './component/header';
 import Footer from './component/footer';
 import Loading from './/component/loading';
+import 'antd/dist/antd.css'
 import {
     Switch,
     Route,
@@ -24,7 +25,7 @@ function App() {
           <Route path='/history' component= {History}  />
           <Route path="/about" component={About} />
           <Route path="/login" component={Login} />
-          <Route path="register" component={Register} />
+          <Route path="/register" component={Register} />
         </Switch>
       </Suspense>
       </main>

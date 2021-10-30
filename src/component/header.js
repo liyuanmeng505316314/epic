@@ -1,7 +1,9 @@
-import React from 'react';
+import React,{useState} from 'react';
 import imgUrl from './beauty.jpg'
 import styled from 'styled-components'
 import {NavLink}  from 'react-router-dom';
+import { Button } from 'antd';
+
 
 const Header = styled.header`
 display:flex;
@@ -28,8 +30,13 @@ margin-left:60px;
     border-bottom:1px solid white;
 }
 `
+const StyledButton=styled(Button)`
+margin-left:40px;
+`
+
 
 function Component (){
+   const [isLogin, setIsLogin] = useState(false);
     return(
         <Header>
         <Div>Epic图床</Div>
@@ -39,6 +46,15 @@ function Component (){
             <StyledLink to="/history" style={{textDecoration:'none'}}   activeClassName="active">上传历史</StyledLink>
             <StyledLink to="/about" style={{textDecoration:'none'}}  activeClassName="active">关于我</StyledLink>
         </nav>
+        <>{
+        isLogin  ?<>
+        Hello,My Master <StyledButton  type="primary" onClick={()=>setIsLogin(false)}> 注销 </StyledButton>
+        </>:<>       
+        <StyledButton  type="primary" onClick={()=>{setIsLogin(true)}}> 登录</StyledButton>
+        <StyledButton  type="primary" onClick={()=>setIsLogin(true)}> 注册                   </StyledButton>
+        </>
+        }
+        </>
         </Header>
     )
 }
