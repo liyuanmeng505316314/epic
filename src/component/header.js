@@ -1,8 +1,11 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import imgUrl from './beauty.jpg'
 import styled from 'styled-components'
 import {NavLink}  from 'react-router-dom';
 import { Button } from 'antd';
+import { useStore } from '../store';
+import { useHistory } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
 
 const Header = styled.header`
@@ -33,12 +36,33 @@ margin-left:60px;
 const StyledButton=styled(Button)`
 margin-left:40px;
 `
+const H3=styled.h3`
+color:#fff;
+margin-top:12px;
+margin-left:40px;
+`
 
 
-function Component (){
-   const [isLogin, setIsLogin] = useState(false);
+const  Component = observer(() => {
+   const {AuthStore,UserStore} =useStore();
+   const history = useHistory();
+   
+
+   const handleLogOut=()=>{
+    UserStore.resetUser()
+    AuthStore.logOut()
+    console.log('注销，清除当前用户信息')
+   };
+   const handleLogin=()=>{
+       history.push('/login')
+      console.log('跳转到登录页面')
+   };
+   const handleRegister=()=>{
+    history.push('/register')
+    console.log('跳转到注册页面')   
+   };
     return(
-        <Header>
+        <Header>    
         <Div>Epic图床</Div>
         <Logo src={imgUrl} alt='beauty' /> 
         <nav>
@@ -47,17 +71,19 @@ function Component (){
             <StyledLink to="/about" style={{textDecoration:'none'}}  activeClassName="active">关于我</StyledLink>
         </nav>
         <>{
-        isLogin  ?<>
-        Hello,My Master <StyledButton  type="primary" onClick={()=>setIsLogin(false)}> 注销 </StyledButton>
-        </>:<>       
-        <StyledButton  type="primary" onClick={()=>{setIsLogin(true)}}> 登录</StyledButton>
-        <StyledButton  type="primary" onClick={()=>setIsLogin(true)}> 注册                   </StyledButton>
+         UserStore.currentUser? 
+        <>
+        <H3>{AuthStore.values.username}</H3>
+        <StyledButton  type="primary" onClick={handleLogOut}> 注销 </StyledButton>
+        </>: <>       
+        <StyledButton  type="primary" onClick={handleLogin}> 登录</StyledButton>
+        <StyledButton  type="primary" onClick={handleRegister}> 注册  </StyledButton>
         </>
         }
         </>
         </Header>
     )
-}
+});
 
 export default Component;
 

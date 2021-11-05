@@ -1,19 +1,15 @@
-import React,{useRef} from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import {useStore } from '../store';
 
 const Home=observer(()=>{
-    const {AuthStore} =useStore();
-    const inputRef=useRef();
-
-    const bindChange= e =>{
-        AuthStore.setUsername(inputRef.current.value);
-        console.log(AuthStore.values.username);
-    };
+    const {AuthStore,UserStore} =useStore();
     return(
+        UserStore.currentUser?
         <>
-        <h1> Home:{AuthStore.values.username} </h1>
-        <input onChange={bindChange} ref={inputRef}></input>
+        <h1> {AuthStore.values.username}，您已登录，可上传图片 </h1>
+        </>:<>
+        <h1>请先登录再上传图片</h1>
         </>
     )
 })

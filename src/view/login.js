@@ -2,6 +2,8 @@ import { Form, Input, Button} from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import {useStore } from '../store';
+import { useHistory } from 'react-router-dom';
+
 
 const Wrapper=styled.div`
 max-width:600px;
@@ -16,7 +18,8 @@ margin-bottom:25px;
 `
 
 const Component = () => {
-const { AuthStore } = useStore();
+const { AuthStore,UserStore } = useStore();
+const history = useHistory();
   const onFinish = (values) => {
         console.log('Success2:', values);
         AuthStore.setUsername(values.username);
@@ -24,10 +27,13 @@ const { AuthStore } = useStore();
         AuthStore.login()
           .then(() => {
             console.log('登录成功,跳转到首页')
+            console.log(UserStore.currentUser)
+            history.push('/')
           }).catch((e)=>{
             console.log(e)
             console.log('登录失败')
           })
+
   };
 
   const onFinishFailed = (errorInfo) => {

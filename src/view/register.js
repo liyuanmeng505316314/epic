@@ -1,8 +1,7 @@
-import { Form, Input, Button} from 'antd';
+import { Form, Input, Button } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { Auth } from '../model';
-import {useStore } from '../store';
+import {useStore } from '../store';  // 引入useStore，user是对Auth的进一步封装，通过他，我们的V层，可以与M层交互
 import { useHistory } from 'react-router-dom';
 
 const Wrapper=styled.div`
@@ -12,33 +11,27 @@ box-shadow:2px 2px 2px 3px rgba(0,0,0,0.3);
 border-radius:6px;
 padding:20px;
 `
-const Title=styled.h1`
+const Title=styled.h1`  
 text-align:center;
 margin-bottom:25px;
 `
 
 const Component = () => {
+  const {AuthStore} = useStore(); // 我怀疑userStore是以一个构造函数，而不用new 用{AuthStore}
+  const history = useHistory();
 
-  const {AuthStore} = useStore();
 
-  
-  // const onFinish2 = (values) => {
-  //   AuthStore.setUsername(values.username);
-  //   AuthStore.setPassword(values.password);
-  //   AuthStore.register().then(()=>{console.log('注册成功')}).catch(()=>{console.log('注册失败')})
-  //   console.log('执行了onFinish')
-  // };
-
-  const onFinish = (values) => {
+  const onFinish = values => {
     console.log('Success2:', values);
     AuthStore.setUsername(values.username);
     AuthStore.setPassword(values.password);
     AuthStore.register()
       .then(() => {
-        console.log('登录成功,跳转到首页')
+        console.log('注册成功,跳转到首页')
+        history.push('/')
       }).catch((e)=>{
         console.log(e)
-        console.log('登录失败')
+        console.log('注册失败')
       })
 };
 
@@ -52,12 +45,12 @@ const Component = () => {
       return Promise.resolve()
    };
 
-   const validateConfirm = ({getFieldValue}) => ({
-      validator(rule,value){
-         if(getFieldValue('password')===value) return Promise.resolve
-         return Promise.reject('两次密码不一致')
-     }
-   });
+  //  const validateConfirm = ({getFieldValue}) => ({
+  //     validator(rule,value){
+  //        if(getFieldValue('password')===value) return Promise.resolve
+  //        return Promise.reject('两次密码不一致')
+  //    }
+  //  });
 
   return (
     <Wrapper>
@@ -116,9 +109,11 @@ const Component = () => {
         <Input.Password />
       </Form.Item>
 
-      {/* 确认密码 */}
+       {/* 确认密码  */}
+ 
+       {/* 不知道为什么，加了confirm就不行，我也不懂为什么 */}
 
-      <Form.Item
+      {/* <Form.Item
         label="确认密码"
         name="confirm"
         rules={[
@@ -126,11 +121,11 @@ const Component = () => {
             required: true,
             message: '请确认密码！',
           },
-          validateConfirm
+          validateConfirm 
         ]}
       >
         <Input.Password />
-      </Form.Item>
+      </Form.Item> */}
 
       {/* 没有用的cheackbox栏 */}
       {/* <Form.Item
@@ -150,7 +145,7 @@ const Component = () => {
           span: 30,
         }}
       >
-        <Button type="primary" htmlType="submit"  onClick="console.log('ok')">
+        <Button type="primary" htmlType="submit" >
         提交
         </Button>
       </Form.Item>

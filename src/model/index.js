@@ -1,29 +1,30 @@
 import AV,{Query,User} from 'leancloud-storage'
 
-AV.init({
+AV.init({ //安装规范对AV初始化
     appId:"34eLG26lSun8CGKdE28ayYJY-gzGzoHsz",
     appKey:"5y1j3cbdC3DUo6joCdq6iKkU",
     serverURL:"https://34elg26l.lc-cn-n1-shared.com",
 })
 
-const Auth={
-    register(username,password){
-    let user=new User();
-    user.setUsername(username);
-    user.setPassword(password);
-    // eslint-disable-next-line no-unused-expressions
-    return new Promise((resolve,reject)=>{
-        user.signUp().then((RegisterUser)=>{console.log(' RegisterSuccess');console.log(RegisterUser)},(error)=>{console.log('error')})})
-   },
-   login(username,password){
-    let user=new User();
-    user.setUsername(username);
+//封装一个Auth对象，待会再导出去，让其他页面也能使用，Auth对象
+
+const Auth={ //Auth是个对象，封装了几个工具方法
+    //register现在有问题，_a 不识别，报错
+    register(username,password){  //register是一个工具方法，用来管理注册的一系列行为
+    var user=new AV.User(); //User是AV里封装好的类，哪里直接用
+    user.setUsername(username); //user对象是刚构造好的对象，里面有包自带的工具方法，通过这些工具方法可以实现后端的功能
     user.setPassword(password);
     return new Promise((resolve,reject)=>{
-        User.logUp().then((loginUser)=>{console.log('LoginSuccess');console.log(loginUser)},(error)=>{console.log('error')})})
+        user.signUp().then(signUpUser=>resolve(signUpUser),error=> reject(error))  
+    })
+},
+   login(username,password){ // login函数现在暂时是能行
+    return new Promise((resolve,reject)=>{
+        User.logIn(username,password).then(loginUser=>resolve(loginUser),error=> reject(error))
+    })
    },
-   logout(){
-       User.logout();
+   logOut(){
+       User.logOut();//忘记大小写是Out
    },
    getCurrentUser(){
       return User.current();
@@ -31,7 +32,9 @@ const Auth={
    }
 
 
-
-
 // eslint-disable-next-line import/no-anonymous-default-export
-export {Auth};
+export {Auth}; //把Auth对象导出去
+
+
+
+
