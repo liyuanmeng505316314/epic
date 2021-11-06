@@ -1,17 +1,20 @@
 import {createContext,useContext} from 'react';
 // import {AuthStore} from './auth'; 以前的AuthStore是类
 import AuthStore from './auth';
-import UserStore from './user'
+import UserStore from './user';
+import ImageStore from './image'
 
 
 const context = createContext({
     AuthStore,
-    UserStore
+    UserStore,
+    ImageStore 
 }); //context是createContext函数的返回值，该函数的传参是个对象  
 
 window.stores = {
     AuthStore,
-    UserStore
+    UserStore,
+    ImageStore,
     // ImageStore,
     // HistoryStore
   };

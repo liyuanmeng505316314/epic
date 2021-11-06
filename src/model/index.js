@@ -31,9 +31,22 @@ const Auth={ //Auth是个对象，封装了几个工具方法
    },
    }
 
+   const UpLoader={
+       add(filename,file){
+           const item=new AV.Object('image')
+           var avFile = new AV.File(filename, file);
+           item.set('title', filename);
+           item.set('owner', AV.User.current());
+           item.set('url', avFile);
+           return new Promise((resolve,reject)=>{
+             item.save().then((serverFile=>{console.log('保存用户对象成功');resolve(serverFile)}),error=>{console.log('保存用户对象失败');reject(error)})
+           })
+       }
+   }
+
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export {Auth}; //把Auth对象导出去
+export {Auth, UpLoader}; //把Auth对象导出去
 
 
 
