@@ -31,7 +31,7 @@ const Auth={ //Auth是个对象，封装了几个工具方法
    },
    }
 
-   const UpLoader={
+   const Uploader={
        add(filename,file){
            const item=new AV.Object('image')
            var avFile = new AV.File(filename, file);
@@ -39,14 +39,28 @@ const Auth={ //Auth是个对象，封装了几个工具方法
            item.set('owner', AV.User.current());
            item.set('url', avFile);
            return new Promise((resolve,reject)=>{
-             item.save().then((serverFile=>{console.log('保存用户对象成功');resolve(serverFile)}),error=>{console.log('保存用户对象失败');reject(error)})
+             item.save().then((serverFile=>resolve(serverFile)),error=>reject(error))
            })
-       }
+       },
+       find({page=0, limit=10}) {
+        const query = new AV.Query('Image');
+        query.include('owner');
+        query.limit(limit);
+        query.skip(page*limit);
+        query.descending('createdAt');
+        query.equalTo('owner', AV.User.current());
+        return new Promise((resolve, reject) => {
+          query.find()
+            .then(results => resolve(results))
+            .catch(error => reject(error))
+        });
+      }
    }
 
+  window.Uploader=Uploader;
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export {Auth, UpLoader}; //把Auth对象导出去
+export {Auth, Uploader}; //把Auth对象导出去
 
 
 

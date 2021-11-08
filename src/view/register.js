@@ -1,4 +1,4 @@
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button,message } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import {useStore } from '../store';  // 引入useStore，user是对Auth的进一步封装，通过他，我们的V层，可以与M层交互

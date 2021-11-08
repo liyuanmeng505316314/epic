@@ -1,4 +1,4 @@
-import { Form, Input, Button} from 'antd';
+import { Form, Input, Button,message} from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import {useStore } from '../store';
@@ -30,7 +30,7 @@ const history = useHistory();
             console.log(UserStore.currentUser)
             history.push('/')
           }).catch((e)=>{
-            console.log(e)
+            console.log(e)  
             console.log('登录失败')
           })
 

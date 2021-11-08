@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { observable,action,makeObservable} from 'mobx'
-import {UpLoader} from '../model'
+import {Uploader} from '../model'
 
 // 这个ImageStore存储的是，用户上传的图片信息，以及部分的操作逻辑，我觉得属于VM层的内容
 class ImageStore{  // ImageStore是一个对象，UpLoader也是一个对象，两个对象都有自己的属性和方法，而UpLoader的工具方法，是来自Auth对象的工具方法，并且对其进行了修饰
@@ -24,10 +24,11 @@ class ImageStore{  // ImageStore是一个对象，UpLoader也是一个对象，�
     };
     @action upLoad(){
         this.isUploading=true;
+        this.serverFile=null;
         return new Promise((resolve,reject)=>{
-            UpLoader.add(this.fileName,this.file)
+            Uploader.add(this.fileName,this.file)
             .then(serverFile=>{
-                this.serverFile=serverFile;
+                this.serverFile=serverFile
                 console.log('上传成功')
                 resolve(serverFile)
             })
@@ -35,10 +36,11 @@ class ImageStore{  // ImageStore是一个对象，UpLoader也是一个对象，�
                 console.log('上传失败')
                 reject(error)
             })
-            .finally(
-                this.isUploading=false
-            )
         }) 
+    }
+    @action reset(){
+       this.isUploading=false;
+       this.serverFile=null;
     }
 
 }

@@ -1,7 +1,9 @@
 import { message } from 'antd';
 import { observable,action,makeObservable} from 'mobx'
+import HistoryStore from './history'
 import {Auth} from '../model'
 import UserStore from './user'
+import ImageStore from './image'
 
 // 这个AuthStore存储的是，用户临时的登录信息，以及部分的操作逻辑，我觉得属于VM层的内容
 class AuthStore{  // AuthStore是一个对象，Auth也是一个对象，两个对象都有自己的属性和方法，而AuthStore的工具方法，是来自Auth对象的工具方法，并且对其进行了修饰
@@ -22,11 +24,9 @@ class AuthStore{  // AuthStore是一个对象，Auth也是一个对象，两个�
     return new Promise((resolve,reject)=>{  // promise是一个ES6自带的构造函数，会生成一个Promise对象，传进去的参数是一个箭头函数。定义如果事件成功执行什么，事件失败执行什么
       Auth.login(this.values.username,this.values.password) //成功之后可以做一些事情，那就是用then和catch，如果事件成功就执行then代码，如果事件失败就执行catch代码
        .then(user=>{
-            message.success('登录成功，正准备跳转到首页')
             UserStore.pullUser();
             resolve(user)})
         .catch(err=>{
-            message.error('登录失败，您输入的账号和密码可能有误');
             UserStore.resetUser();
             reject(err)});
         })
@@ -48,9 +48,12 @@ class AuthStore{  // AuthStore是一个对象，Auth也是一个对象，两个�
         })
   };
   @action logOut(){
+      console.log('注销');
+      HistoryStore.reset();
       UserStore.resetUser();
-      this.values.password=''
-      this.values.username=''
+      ImageStore.reset();
+      this.values.password='';
+      this.values.username='';
       Auth.logOut();
   }
 }
