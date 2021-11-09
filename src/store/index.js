@@ -1,4 +1,4 @@
-import {createContext,useContext} from 'react';
+import React, {createContext,useContext} from 'react';
 // import {AuthStore} from './auth'; 以前的AuthStore是类
 import AuthStore from './auth';
 import UserStore from './user';

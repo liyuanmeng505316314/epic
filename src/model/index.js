@@ -43,7 +43,8 @@ const Auth={ //Auth是个对象，封装了几个工具方法
            })
        },
        find({page=0, limit=10}) {
-        const query = new AV.Query('Image');
+        console.log('执行了model的find')
+        const query = new AV.Query('image');
         query.include('owner');
         query.limit(limit);
         query.skip(page*limit);
@@ -51,13 +52,13 @@ const Auth={ //Auth是个对象，封装了几个工具方法
         query.equalTo('owner', AV.User.current());
         return new Promise((resolve, reject) => {
           query.find()
-            .then(results => resolve(results))
-            .catch(error => reject(error))
+            .then(results =>{console.log('执行了query的find');resolve(results)})
+            .catch(error => {console.log('query的find失败');reject(error)})
         });
       }
    }
 
-  window.Uploader=Uploader;
+    
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export {Auth, Uploader}; //把Auth对象导出去

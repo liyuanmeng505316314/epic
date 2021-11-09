@@ -12,17 +12,23 @@ class HistoryStore {
 
   @action append(newList) { // 再旧的用户的列表上，添加新的列表，就像新上传了图片，列表就要多添加一条记录了
     this.list = this.list.concat(newList);
+    console.log(newList)
   }
 
+
   @action find() {
+    console.log('执行了History的find')
     this.isLoading = true;
     Uploader.find({page: this.page, limit: this.limit})
       .then(newList => {
+        console.log('执行了第Uploader的find')
         this.append(newList);
+        console.log('打印newlist'+newList)
         this.page++;
-        if(newList.length < this.limit) {
+        if(newList.length < this.limit){
           this.hasMore = false;
         }
+        console.log('Uploader.find执行完成')
       }).catch(error => {
         message.error('加载数据失败');
       }).finally(() => {
