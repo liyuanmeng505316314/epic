@@ -23,7 +23,7 @@ const { Dragger } = Upload;
 
  const Component=observer(()=>{
     // console.log('1') 
-     const {ImageStore,UserStore} =useStore()
+     const { ImageStore, UserStore} =useStore()
      const ref1=useRef();
      const ref2=useRef();
      const store=useLocalStore(()=>({
@@ -61,7 +61,6 @@ const { Dragger } = Upload;
             // console.log('3') 这里出现了错误，原因是beforeUpload的L不用大写，当前页面出bug了就在当前一面一步一步的执行下去
             ImageStore.setFile(file);
             ImageStore.setFileName(file.name);
-            window.file=file;
             if(UserStore.currentUser==null){
                 message.warning('请先登录再上传')
                 return false;

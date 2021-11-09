@@ -22,6 +22,7 @@ class ImageStore{  // ImageStore是一个对象，UpLoader也是一个对象，�
     @action setFile(newFile){
         this.file=newFile;
     };
+    
     @action upLoad(){
         this.isUploading=true;
         this.serverFile=null;

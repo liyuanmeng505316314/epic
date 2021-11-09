@@ -1,9 +1,13 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 import { Uploader } from '../model';
 import { message } from 'antd';
 
 
 class HistoryStore {
+   constructor(){
+     makeObservable(this)
+   };
+
   @observable list = [];
   @observable isLoading = false;
   @observable hasMore = true;
